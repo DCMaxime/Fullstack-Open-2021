@@ -35,18 +35,27 @@ const App = () => {
 
 const Header = ({text}) => <h1>{text}</h1>
 const Button = ({handleClick, text}) => <button onClick={handleClick}>{text}</button>
-const Statistic = ({text, count: value}) => <p>{text} {value}</p>
+
+const Statistic = ({text, count: value}) => (
+        <tr>
+            <td>{text}</td>
+            <td>{value}</td>
+        </tr>
+)
+
 const Statistics = ({good, neutral, bad, all}) => {
     if (all < 1) return <p>No feedback given</p>
     return (
-        <>
-            <Statistic text="Good" count={good}/>
-            <Statistic text="Neutral" count={neutral}/>
-            <Statistic text="Bad" count={bad}/>
-            <Statistic text="All" count={all}/>
-            <Statistic text="Average" count={(good - bad) / all}/>
-            <Statistic text="Positive" count={good / (good + bad + neutral) * 100 + ' %'}/>
-        </>
+        <table>
+            <tbody>
+                <Statistic text="Good" count={good}/>
+                <Statistic text="Neutral" count={neutral}/>
+                <Statistic text="Bad" count={bad}/>
+                <Statistic text="All" count={all}/>
+                <Statistic text="Average" count={(good - bad) / all}/>
+                <Statistic text="Positive" count={good / (good + bad + neutral) * 100 + ' %'}/>
+            </tbody>
+        </table>
     )
 }
 
