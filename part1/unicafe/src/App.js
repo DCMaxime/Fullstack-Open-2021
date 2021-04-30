@@ -27,12 +27,8 @@ const App = () => {
             <Button handleClick={handleNeutralClick} text="Neutral"/>
             <Button handleClick={handleBadClick} text="Bad"/>
             <Header text="Statistics"/>
-            <Stats text="Good" count={good}/>
-            <Stats text="Neutral" count={neutral}/>
-            <Stats text="Bad" count={bad}/>
-            <Stats text="All" count={all}/>
-            <Stats text="Average" count={(good - bad) / all}/>
-            <Stats text="Positive" count={good / (good + bad + neutral) * 100 + ' %'}/>
+            <Statistics good={good} neutral={neutral} bad={bad} all={all}/>
+
         </div>
     )
 }
@@ -40,5 +36,18 @@ const App = () => {
 const Header = ({text}) => <h1>{text}</h1>
 const Button = ({handleClick, text}) => <button onClick={handleClick}>{text}</button>
 const Stats = ({text, count}) => <p>{text} {count}</p>
+const Statistics = ({good, neutral, bad, all}) => {
+    if (all < 1) return <p>No feedback given</p>
+    return (
+        <>
+            <Stats text="Good" count={good}/>
+            <Stats text="Neutral" count={neutral}/>
+            <Stats text="Bad" count={bad}/>
+            <Stats text="All" count={all}/>
+            <Stats text="Average" count={(good - bad) / all}/>
+            <Stats text="Positive" count={good / (good + bad + neutral) * 100 + ' %'}/>
+        </>
+    )
+}
 
 export default App
