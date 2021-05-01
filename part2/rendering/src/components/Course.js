@@ -1,7 +1,4 @@
 import React from "react";
-import Header from "./Header";
-import Content from "./Content";
-import Total from "./Total";
 
 const Course = ({course}) => {
     return (
@@ -12,5 +9,30 @@ const Course = ({course}) => {
         </>
     )
 }
+
+const Header = ({ course }) => {
+    return (
+        <h1>{course.name}</h1>
+    )
+}
+
+const Content = ({course}) => {
+    return (
+        <>
+            {course.parts.map(
+                part => <Part key={part.id} part={part}/>
+            )}
+        </>
+    )
+}
+
+const Total = ({ parts }) => {
+    const sum = parts.reduce((s, p) => s + p.exercises, 0)
+    return(
+        <p><b>Total of {sum} exercises</b></p>
+    )
+}
+
+const Part = ({part}) => <p> {part.name} {part.exercises} </p>
 
 export default Course
