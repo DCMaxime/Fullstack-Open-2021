@@ -12,11 +12,16 @@ const App = () => {
 
     const addPerson = (event) => {
         event.preventDefault()
-        const newPerson = {
-            name: newName
+        if (persons.some((person => person.name === newName)))
+            alert(`${newName} is already added to phonebook`)
+        else {
+            const newPerson = {
+                name: newName
+            }
+            setPersons(persons.concat(newPerson))
+            setNewName('')
         }
-        setPersons(persons.concat(newPerson))
-        setNewName('')
+
     }
 
     return (
@@ -33,7 +38,7 @@ const App = () => {
             <h2>Numbers</h2>
             <div>
                 {persons.map((person) => {
-                    return ( <p key={person.name}>{person.name}</p> )
+                    return (<p key={person.name}>{person.name}</p>)
                 })}
             </div>
         </div>
