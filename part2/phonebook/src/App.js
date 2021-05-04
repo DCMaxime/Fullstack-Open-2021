@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import personsService from './services/persons'
 
@@ -50,6 +50,16 @@ const App = () => {
     const handleOnChangeNameFilter = (event) => {
         setNameFilter(event.target.value)
     }
+
+    const handleOnClickDeletePerson = ({person: personToDelete}) => {
+        if (window.confirm(`Delete ${personToDelete.name}`)) {
+            personsService.del(personToDelete.id)
+                .then(response => {
+                    setPersons(persons.filter(person => person.id !== personToDelete.id))
+                })
+        }
+    }
+
     return (
         <div>
             <h2>Phonebook</h2>
@@ -63,7 +73,8 @@ const App = () => {
                 handleOnPhoneNumberChange={handleOnPhoneNumberChange}
             />
             <h3>Numbers</h3>
-            <Persons persons={persons} personsToShow={personsToShow} />
+            <Persons persons={persons} personsToShow={personsToShow}
+                     handleOnClickDeletePerson={handleOnClickDeletePerson}/>
         </div>
     )
 }
@@ -91,10 +102,16 @@ const PersonForm = ({onSubmitHandler, newName, handleOnNameChange, newPhoneNumbe
     )
 }
 
-const Persons = ({persons, personsToShow}) => {
+const Persons = ({persons, personsToShow, handleOnClickDeletePerson}) => {
     return (
         personsToShow.map((person) => {
-            return (<p key={person.name}>{person.name} {person.number}</p>)
+            return (
+                <p key={person.name}>
+                    {person.name}
+                    {person.number}
+                    <button onClick={() => handleOnClickDeletePerson({person})}>Delete</button>
+                </p>
+            )
         })
     )
 }
