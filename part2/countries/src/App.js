@@ -24,29 +24,32 @@ function App() {
             setCountriesToShow([])
     }
 
+    const handleOnClickShowCountry = (country) => setCountriesToShow([country])
+
     return (
         <div>
             Find countries : <input value={countryNameFilter} onChange={handleChangeOnCountryNameFilter}/>
-            <Display countries={countriesToShow}/>
+            <Display countries={countriesToShow} handleOnClickShowCountry={handleOnClickShowCountry}/>
         </div>
     );
 }
 
-const Display = ({countries}) => {
+const Display = ({countries, handleOnClickShowCountry}) => {
+
     if(countries.length < 1)
         return <></>
     else if(countries.length === 1)
         return <Country country={countries[0]}/>
     else if(countries.length <= 10)
-        return <Countries countries={countries}/>
+        return <Countries countries={countries} handleOnClickShowCountry={handleOnClickShowCountry}/>
     else if (countries.length > 10)
         return <p>Too many matches, specify another filter.</p>
 }
 
-const Countries = ({countries}) => {
+const Countries = ({countries, handleOnClickShowCountry}) => {
     return (
         <ul>
-            {countries.map(country => <li key={country.name}>{country.name}</li>)}
+            {countries.map(country => <li key={country.name}>{country.name} <button onClick={() => handleOnClickShowCountry(country)}>Show</button></li>)}
         </ul>
     )
 }
