@@ -1,12 +1,15 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import personsService from './services/persons'
+import './index.css'
 
 const App = () => {
     const [persons, setPersons] = useState([])
     const [newName, setNewName] = useState('')
     const [newPhoneNumber, setNewPhoneNumber] = useState('')
     const [nameFilter, setNameFilter] = useState('')
+    const [notificationMessage, setNotificationMessage] = useState(null)
+    const [errorMessage, setErrorMessage] = useState(null)
 
     useEffect(() => {
         axios
@@ -35,6 +38,10 @@ const App = () => {
                         setPersons(persons.map(person => person.id === returnedPerson.id ? returnedPerson : person))
                         setNewName('')
                         setNewPhoneNumber('')
+                        setNotificationMessage(`Modified ${returnedPerson.name} `)
+                        setTimeout(() => {
+                            setNotificationMessage(null)
+                        }, 5000)
                     })
             }
         } else {
@@ -47,6 +54,10 @@ const App = () => {
                     setPersons(persons.concat(returnedPerson))
                     setNewName('')
                     setNewPhoneNumber('')
+                    setNotificationMessage(`Added ${returnedPerson.name} `)
+                    setTimeout(() => {
+                        setNotificationMessage(null)
+                    }, 5000)
                 })
         }
 
@@ -66,12 +77,21 @@ const App = () => {
                 .then(response => {
                     setPersons(persons.filter(person => person.id !== personToDelete.id))
                 })
+                .catch(error => {
+                    setErrorMessage(`Information of '${personToDelete.name}' was already removed from server`)
+                    setTimeout(() => {
+                        setErrorMessage(null)
+                    }, 5000)
+                    setPersons(persons.filter(person => person.id !== personToDelete.id))
+                })
         }
     }
 
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification message={notificationMessage}/>
+            <Error message={errorMessage}/>
             <Filter text="Filter shown with :" value={nameFilter} onChangeHandler={handleOnChangeNameFilter}/>
             <h3>Add a new</h3>
             <PersonForm
@@ -116,12 +136,35 @@ const Persons = ({persons, personsToShow, handleOnClickDeletePerson}) => {
         personsToShow.map((person) => {
             return (
                 <p key={person.name}>
-                    {person.name}
-                    {person.number}
+                    {person.name} {person.number}
                     <button onClick={() => handleOnClickDeletePerson({person})}>Delete</button>
                 </p>
             )
         })
+    )
+}
+
+const Notification = ({message}) => {
+    if (message === null) {
+        return null
+    }
+
+    return (
+        <div className="notification">
+            {message}
+        </div>
+    )
+}
+
+const Error = ({message}) => {
+    if (message === null) {
+        return null
+    }
+
+    return (
+        <div className="error">
+            {message}
+        </div>
     )
 }
 
