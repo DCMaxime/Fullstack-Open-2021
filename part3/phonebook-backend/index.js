@@ -1,9 +1,13 @@
+require('dotenv').config()
+
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
+const Person = require('./models/person')
 
 app.use(express.json())
+
 const morganCustom = morgan(function (tokens, req, res) {
     return [
         tokens.method(req, res),
@@ -14,59 +18,37 @@ const morganCustom = morgan(function (tokens, req, res) {
         tokens['body'](req, res)
     ].join(' ')
 })
+
 morgan.token('body', function (req, res) {
     const body = JSON.stringify(req.body)
     return body === "{}" ? "" : body
 })
+
 app.use(morganCustom)
 app.use(cors())
 app.use(express.static('build'))
 
-let persons = [
-    {
-        "name": "Arto Hellas",
-        "number": "040-123456",
-        "id": 1
-    },
-    {
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523",
-        "id": 2
-    },
-    {
-        "name": "Dan Abramov",
-        "number": "12-43-234345",
-        "id": 3
-    },
-    {
-        "name": "Mary Poppendieck",
-        "number": "39-23-6423122",
-        "id": 4
-    }
-]
-
 app.get('/api/persons', (req, res) => {
-    res.send(persons)
+    Person.find({}).then(persons => {
+        res.json(persons)
+    })
 })
 
 app.get('/info', (req, res) => {
-    const numberOfPersons = persons.length
-    const currentTime = Date()
-    res.send(`
+    Person.find({}).then(persons => {
+        const numberOfPersons = persons.length
+        const currentTime = Date()
+        res.send(`
         <p> Phonebook has info for ${numberOfPersons} people
         <p> ${currentTime} </p>
     `)
+    })
 })
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-
-    if (person) {
+    Person.findById(request.params.id).then(person => {
         response.json(person)
-    } else {
-        response.status(404).end()
-    }
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -76,44 +58,23 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
-const generateId = () => {
-    const min = Math.ceil(5);
-    const max = Math.floor(1000000);
-    return Math.floor(Math.random() * (max - min +1)) + min;
-}
-
 app.post('/api/persons', (request, response) => {
     const body = request.body
-
-    if (!body.name) {
-        return response.status(400).json({
-            error: 'name missing'
-        })
-    }
-    if (!body.number) {
-        return response.status(400).json({
-            error: 'number missing'
-        })
-    }
-
-    if(persons.some((person => person.name === body.name))) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }
-
-    const person = {
+    if (body.name === undefined)
+        return response.status(400).json({error: 'name missing'})
+    if (body.number === undefined)
+        return response.status(400).json({error: 'number missing'})
+    const person = new Person({
         name: body.name,
         number: body.number,
-        id: generateId(),
-    }
-
-    persons = persons.concat(person)
-
-    response.json(person)
+    })
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 })
 
 const PORT = process.env.PORT || 3001
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
