@@ -16,6 +16,12 @@ const App = () => {
             .then(initialPersons => {
                 setPersons(initialPersons)
             })
+            .catch(error => {
+                setErrorMessage(error.response.data.error)
+                setTimeout(() => {
+                    setErrorMessage(null)
+                }, 5000)
+            })
     }, [])
 
     const handleOnNameChange = (event) => {
@@ -55,6 +61,12 @@ const App = () => {
                     setNotificationMessage(`Added ${returnedPerson.name} `)
                     setTimeout(() => {
                         setNotificationMessage(null)
+                    }, 5000)
+                })
+                .catch(error => {
+                    setErrorMessage(error.response.data.error)
+                    setTimeout(() => {
+                        setErrorMessage(null)
                     }, 5000)
                 })
         }
