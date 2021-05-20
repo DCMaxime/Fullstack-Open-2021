@@ -19,6 +19,24 @@ test('there are two blogs', async () => {
     expect(response.body).toHaveLength(2)
 })
 
+test('add another blog to the list', async () => {
+    const initialResponse = await api.get('/api/blogs')
+    const newBlog = {
+        title: "Test de blog 03",
+        author: "Encore Moi-Même",
+        url: "http://git.waryle.com",
+        likes: 36
+    }
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(initialResponse.body.length + 1)
+    expect(response.body.find((blog) => blog.title === newBlog.title)).toMatchObject(newBlog)
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
