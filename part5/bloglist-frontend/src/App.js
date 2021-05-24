@@ -81,7 +81,7 @@ const App = () => {
     window.location.reload(false)
   }
 
-  const blogList = () => (<> {blogs.map(blog => <Blog key={blog.id} blog={blog}/>)} </>)
+  const blogList = () => (<div id='blogList'> {blogs.map(blog => <Blog key={blog.id} blog={blog}/>)} </div>)
 
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()

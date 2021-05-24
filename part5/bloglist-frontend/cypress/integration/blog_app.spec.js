@@ -46,9 +46,24 @@ describe('Blog app', function () {
       cy.get('#newBlogAuthorInput').type('Test new blog author')
       cy.get('#newBlogUrlInput').type('Test new blog url')
       cy.get('#createNewBlogSubmitButton').click()
-      cy.contains('Test new blog Test new blog author')
       cy.get('#likeButton').click()
       cy.contains('1')
+    })
+
+    it('The user can delete a blog', function() {
+      cy.get('#newBlogFormToggle').click()
+      cy.get('#newBlogTitleInput').type('Test new blog')
+      cy.get('#newBlogAuthorInput').type('Test new blog author')
+      cy.get('#newBlogUrlInput').type('Test new blog url')
+      cy.get('#createNewBlogSubmitButton').click()
+      cy.get('#deleteButton').click()
+      cy.should('not.contain', 'Test new blog Test new blog author')
+    })
+
+    it('Blogs are ordered by likes', function() {
+      cy.createBlog({ title:'Most liked blog',author:'Popular one',url:'yes.io',likes:1000 })
+      cy.createBlog({ title:'Less liked blog',author:'Nobody likes you',url:'no.io',likes:0 })
+      cy.get('#blogList').first().contains('Most liked blog')
     })
   })
 
