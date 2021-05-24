@@ -17,10 +17,27 @@ describe('Blog app', function () {
       cy.get('#loginButton').click()
     })
 
-    it.only('fails with wrong credentials', function() {
+    it('fails with wrong credentials', function() {
       cy.get('#username').type('max')
       cy.get('#password').type('wrong')
       cy.get('#loginButton').click()
+    })
+  })
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.get('#username').type('max')
+      cy.get('#password').type('lpw')
+      cy.get('#loginButton').click()
+    })
+
+    it.only('A blog can be created', function() {
+      cy.get('#newBlogFormToggle').click()
+      cy.get('#newBlogTitleInput').type('Test new blog')
+      cy.get('#newBlogAuthorInput').type('Test new blog author')
+      cy.get('#newBlogUrlInput').type('Test new blog url')
+      cy.get('#createNewBlogSubmitButton').click()
+      cy.contains('Test new blog Test new blog author')
     })
   })
 })
