@@ -56,24 +56,22 @@ const App = () => {
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
-      <div>
-                username
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-                password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
+      <label htmlFor='Username'> Username : </label>
+      <input
+        id='username'
+        type="text"
+        value={username}
+        name="Username"
+        onChange={({ target }) => setUsername(target.value)}
+      />
+      <label htmlFor='Password'> Password : </label>
+      <input
+        id='password'
+        type="password"
+        value={password}
+        name="Password"
+        onChange={({ target }) => setPassword(target.value)}
+      />
       <button type="submit">login</button>
     </form>
   )
@@ -83,7 +81,7 @@ const App = () => {
     window.location.reload(false)
   }
 
-  const blogList = () => ( <> { blogs.map(blog => <Blog key={blog.id} blog={blog}/>) } </> )
+  const blogList = () => (<> {blogs.map(blog => <Blog key={blog.id} blog={blog}/>)} </>)
 
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
@@ -96,7 +94,7 @@ const App = () => {
 
   const blogForm = () => (
     <Togglable buttonLabel="New blog" ref={blogFormRef}>
-      <BlogForm createBlog={addBlog} />
+      <BlogForm createBlog={addBlog}/>
     </Togglable>
   )
 
