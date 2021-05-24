@@ -55,7 +55,7 @@ const App = () => {
   }
 
   const loginForm = () => (
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleLogin} id="loginForm">
       <label htmlFor='Username'> Username : </label>
       <input
         id='username'
@@ -72,7 +72,7 @@ const App = () => {
         name="Password"
         onChange={({ target }) => setPassword(target.value)}
       />
-      <button type="submit">login</button>
+      <button type="submit" id='loginButton'>login</button>
     </form>
   )
 
