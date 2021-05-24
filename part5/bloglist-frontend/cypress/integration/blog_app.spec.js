@@ -31,7 +31,7 @@ describe('Blog app', function () {
       cy.get('#loginButton').click()
     })
 
-    it.only('A blog can be created', function() {
+    it('A blog can be created', function() {
       cy.get('#newBlogFormToggle').click()
       cy.get('#newBlogTitleInput').type('Test new blog')
       cy.get('#newBlogAuthorInput').type('Test new blog author')
@@ -39,5 +39,18 @@ describe('Blog app', function () {
       cy.get('#createNewBlogSubmitButton').click()
       cy.contains('Test new blog Test new blog author')
     })
+
+    it('The user can like a blog', function() {
+      cy.get('#newBlogFormToggle').click()
+      cy.get('#newBlogTitleInput').type('Test new blog')
+      cy.get('#newBlogAuthorInput').type('Test new blog author')
+      cy.get('#newBlogUrlInput').type('Test new blog url')
+      cy.get('#createNewBlogSubmitButton').click()
+      cy.contains('Test new blog Test new blog author')
+      cy.get('#likeButton').click()
+      cy.contains('1')
+    })
   })
+
+
 })
