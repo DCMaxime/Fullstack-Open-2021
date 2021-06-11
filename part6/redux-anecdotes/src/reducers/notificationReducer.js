@@ -4,17 +4,26 @@ const notificationReducer = (state = initialState, action) => {
     console.log('state now: ', state);
     console.log('action', action);
     switch (action.type) {
-        case 'NEW_NOTIFICATION':
-            return {...state, notification: action.notification}
+        case 'SET_NOTIFICATION':
+            return action.notification
+        case 'REMOVE_NOTIFICATION':
+            return ''
         default:
             return state;
     }
 };
 
-export const createNotification = (content) => {
+export const setNotification = (content) => {
     return {
-        type: 'NEW_NOTIFICATION',
+        type: 'SET_NOTIFICATION',
         notification: content
+    }
+};
+
+export const removeNotification = () => {
+    console.log("ICI ON SUPPRIME ~~~~~")
+    return {
+        type: 'REMOVE_NOTIFICATION',
     }
 };
 
