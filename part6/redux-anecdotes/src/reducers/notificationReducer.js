@@ -1,30 +1,33 @@
-const initialState = 'No new notification'
-
-const notificationReducer = (state = initialState, action) => {
+const notificationReducer = (state = null, action) => {
     console.log('state now: ', state);
     console.log('action', action);
     switch (action.type) {
         case 'SET_NOTIFICATION':
-            return action.notification
-        case 'REMOVE_NOTIFICATION':
-            return ''
+            return action.data.notification
         default:
             return state;
     }
 };
 
-export const setNotification = (content) => {
-    return {
-        type: 'SET_NOTIFICATION',
-        notification: content
+export const setNotification = (notification, time) => {
+    return async (dispatch) => {
+        setTimeout(
+            () =>
+                dispatch({
+                    type: 'SET_NOTIFICATION',
+                    data: {
+                        notification: null,
+                    },
+                }),
+            time * 1000
+        )
+        dispatch({
+            type: 'SET_NOTIFICATION',
+            data: {
+                notification,
+            },
+        })
     }
-};
-
-export const removeNotification = () => {
-    console.log("ICI ON SUPPRIME ~~~~~")
-    return {
-        type: 'REMOVE_NOTIFICATION',
-    }
-};
+}
 
 export default notificationReducer;
