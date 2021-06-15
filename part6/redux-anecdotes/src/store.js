@@ -1,5 +1,5 @@
 import {createStore, combineReducers} from "redux";
-import anecdoteReducer from "./reducers/anecdoteReducer";
+import anecdoteReducer, {initializeAnecdotes} from "./reducers/anecdoteReducer";
 import notificationReducer from "./reducers/notificationReducer";
 
 const reducer = combineReducers({
